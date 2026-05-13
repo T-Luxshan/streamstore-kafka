@@ -4,8 +4,9 @@ import uuid
 from confluent_kafka import Producer
 
 producer_config = {
-    "bootstrap,servers": 'localhost:9092'
+    "bootstrap.servers": 'localhost:9092'
 }
+
 
 def delivery_report(err, msg):
     if err:
@@ -13,10 +14,12 @@ def delivery_report(err, msg):
     else:
         print(f"Message delivered {msg.value().decode('utf-8')}")
 
+
 producer = Producer(producer_config)
 
 order = {
-     "user": "Luxshan",
+    "order_id": str(uuid.uuid4()),
+    "user": "Luxshan",
     "item": "Pizza",
     "quantity": 2
 }
@@ -24,9 +27,9 @@ order = {
 value = json.dumps(order).encode("utf-8")
 
 producer.produce(
-    topic="orders", 
+    topic="orders",
     value=value,
-    callback= delivery_report
+    callback=delivery_report
 )
 
 producer.flush()
