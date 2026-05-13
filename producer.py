@@ -26,10 +26,11 @@ order = {
 
 value = json.dumps(order).encode("utf-8")
 
-producer.produce(
-    topic="orders",
-    value=value,
-    callback=delivery_report
-)
+for i in range(5):
+    producer.produce(
+        topic="orders",
+        value=value,
+        callback=delivery_report
+    )
 
 producer.flush()
